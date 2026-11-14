@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Automated EMA 120 Trading Bot – Delta Exchange
 
 A production-grade, highly reliable automated trading platform designed specifically for **Delta Exchange** (supporting **Delta Exchange India**, **Delta Exchange Global**, and **Testnet** environments).
@@ -285,3 +286,6 @@ python -m pytest backend/app/tests -v
 
 This software is for educational and algorithmic trading purposes. Trading cryptocurrency derivatives involves substantial risk of loss. Past performance of any trading strategy is not indicative of future results. Never trade with capital you cannot afford to lose.
 
+=======
+# delta-120
+>>>>>>> 5a2b010ca153a1e9d5417b987f88372e33d25bfc
