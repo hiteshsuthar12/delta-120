@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: delta-ema-trading-backend
+    env: python
+    rootDir: backend
+    plan: starter # Starter plan recommended for 24/7 continuous trading bots without sleep
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: ENVIRONMENT
+        value: production
+      - key: MONGODB_URI
+        sync: false # Set to your MongoDB Atlas connection string
+      - key: MONGODB_DATABASE
+        value: ema_trading_bot
+      - key: ENCRYPTION_KEY
+        value: D3lt4Em4Tr4d1ngB0tS3cr3tK3y1234567890123456=
+      - key: DELTA_ENVIRONMENT
+        value: india
+      - key: DELTA_API_KEY
+        sync: false
+      - key: DELTA_API_SECRET
+        sync: false
+      - key: DEFAULT_SYMBOL
+        value: BTCUSD
+      - key: DEFAULT_TIMEFRAME
+        value: 1h
+      - key: DEFAULT_EMA_PERIOD
+        value: "120"
+      - key: DEFAULT_TARGET_POINTS
+        value: "1500"
+      - key: DEFAULT_STOP_LOSS_POINTS
+        value: "100"
+      - key: DEFAULT_MAX_DAILY_TRADES
+        value: "2"
+      - key: DEFAULT_POSITION_SIZE_PCT
+        value: "100"
+      - key: DEFAULT_LEVERAGE
+        value: "25"
+      - key: DEFAULT_TIMEZONE
+        value: Asia/Kolkata
+      - key: DEFAULT_TRADING_MODE
+        value: PAPER

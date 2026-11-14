@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  # 1. MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: delta_mongodb
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - delta_network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Python FastAPI Backend Engine
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: delta_backend
+    restart: always
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+      - MONGODB_DATABASE=ema_trading_bot
+    ports:
+      - "8000:8000"
+    networks:
+      - delta_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # 3. React Vite Frontend with Nginx
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: delta_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    networks:
+      - delta_network
+
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  delta_network:
+    driver: bridge
